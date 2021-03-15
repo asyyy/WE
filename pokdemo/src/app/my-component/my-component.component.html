@@ -1,0 +1,24 @@
+<br>
+<input [(ngModel)]="id">
+<input readonly [(ngModel)]="id">
+<button> {{id}}</button>
+<br>
+Mon pokemon choisi : {{choose}}
+<br>
+<input [(ngModel)]="searchedPokemon">
+<select [(ngModel)]="pokemon" (change)="onChange()">
+  <!-- Je recupere tout le pokemon pour ensuite recupere toutes ses info
+  et pas seulement le nom (juste pour savoir comment recupèrer plus d'1 info)-->
+  <option  [ngValue]="poke" *ngFor="let poke of pokedex | filterPokemonPipe:'name':searchedPokemon">{{poke.name}}
+  </option>
+</select>
+<!-- <br>
+<li *ngFor="let poke of pokedex">{{poke.name}}</li>
+<br> -->
+<button (click)="funcGo()"> GO! </button>
+<br>
+<div *ngIf="pokeDetail">
+  <app-c-poke-detail [truc]="pokeDetail"></app-c-poke-detail>
+</div>
+
+<p-calendar [(ngModel)]="calendar"></p-calendar>
