@@ -4,13 +4,10 @@
     <button v-on:click="foo()">
       ok
     </button>
-    <p id ='#app' v-purple> 
-      Il est 11h51
-    </p>
     <p v-background> 
       Il est 11h51
     </p>
-    <p v-background = "red"> 
+    <p v-background = 'red'> 
       Il n'est plus 11h51
     </p>
     <Todos2/>
@@ -23,7 +20,6 @@ import { Component, Vue } from 'vue-property-decorator';
 import {Background} from '../directives/background.directive'
 import Todos2 from '@/components/Todos2.vue';
 
-
 @Component({
   components: {
     Todos2,
@@ -34,7 +30,7 @@ import Todos2 from '@/components/Todos2.vue';
 })
 
 export default class Home extends Vue {
-
+    
     message= 'test';
     visible = true;
     foo(){

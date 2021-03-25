@@ -9,6 +9,6 @@ export class AppComponent {
   title = 'pokdemo';
   // tslint:disable-next-line:typedef
   foo(){
-    this.title = 'Hello le web';
+    this.title = 'It\'s time to shine';
   }
 }

@@ -1,48 +1,60 @@
-<template>
+<template>     
   <div id="todo-list-example">
   <form v-on:submit.prevent="addTodo">
-    <label for="new-todo">Ajouter une tâche</label>
+    <label for="new-todo">Ajouter une tâche </label>
     <input
       v-model="newTodo"
       id="new-todo"
-      placeholder="Ex. nourrir le chat"
+      placeholder="Ex : faire un truc"
+      pattern = ".{1,}"
+      required title = "Au moins 1 caractère"
     >
     <button>Add</button>
   </form>
-  <ul>
-    <li
+  <GererListComponent v-bind:listTodo= todos2 />
+    <!-- <footer v-if="todos2.length>0">  -->
+      <footer v-if="isListMoreThanZero()">
+      <span> Total de tâche : {{todos2.length}} </span> 
       
-      v-for="(todo, index) in todos"
-      v-bind:key="todo.id"
-      v-bind:title="todo.title"
-    >{{todo.title}} <button v-on:click="todos.splice(index, 1)">Supprimer</button></li>
-  </ul>
+    </footer>
   </div>
 </template>
 <script lang="ts">
   import Vue from 'vue';
   import Component from 'vue-class-component';
+  import ClassTodo from './classTodo';
+  import GererListComponent from './gererList.vue'
 
-  @Component({})
+
+  @Component({
+  components: {
+    GererListComponent,
+    
+  },
+})
   export default class Todos2 extends Vue {
     
     nextTodoId  = 1
     newTodo = ''
-    todos = [
-        {
-            id:0,
-            title:'truc a faire',
-        }
-        ]
-    
+    // todos = [
+    //     {
+    //         id:0,
+    //         title:'truc a faire',
+          
+    //     }
+    //     ]
+
+    todos2: ClassTodo[] = [new ClassTodo(0,"truc à faire")]
     
     addTodo() {
         console.log('ola');
-        this.todos.push({id:this.nextTodoId++,title : this.newTodo});
+        // this.todos.push({id:this.nextTodoId++,title : this.newTodo});
+        this.todos2.push(new ClassTodo(this.nextTodoId++,this.newTodo));
         this.newTodo = '';
     }
-    
-    
+    isListMoreThanZero(){
+      return this.todos2.length > 0
+    }
     
 }
 
