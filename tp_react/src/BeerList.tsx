@@ -13,14 +13,19 @@ export default class BeerList extends React.Component<Props, State> {
         value: '',
         beerlist: ["Goudale", "Pelforth", "1664", "Embuscade", "Karmeliet Triple"]
     };
-
+    /**
+     * Supprime un élément de l'attribut beerlist
+     * @param find 
+     */
     supp = (find: string) => {
         this.setState({
             beerlist: this.state.beerlist.filter((item) => item !== find)
         });
     };
-
-    ajout () {
+    /**
+     * Ajout un élément à l'attribut beerlist
+     */
+    ajout() {
         this.setState(prevState => ({
             beerlist: [...prevState.beerlist, this.state.value]
         }));
@@ -30,15 +35,15 @@ export default class BeerList extends React.Component<Props, State> {
         return (
             <div>
                 <label>
-                    Rajouter une bière : 
+                    Rajouter une bière :
                     <input
                         type="text"
                         value={this.state.value}
                         onChange={(event) => { this.setState({ value: event.target.value }) }}
-                        placeholder = "Shazam" />
+                        placeholder="Shazam" />
                 </label>
                 <button onClick={() => this.ajout()}>Ajouter</button>
-                
+
                 {this.state.beerlist.map((item, index) => {
                     return <li key={index}>
                         <Beer id={index} name={item} />
