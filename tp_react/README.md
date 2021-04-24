@@ -1,6 +1,7 @@
 # Rapport tp React
 
 ## Pour lancer le projet
+Pré-réquis : Avoir installer Node.js
 
 Dans le dossier contenant le projet, faire "npm start".
 
