@@ -1,4 +1,4 @@
-# myapp
+# myapp VUE
 
 ## Project setup
 ```

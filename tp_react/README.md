@@ -1,46 +1,79 @@
-# Getting Started with Create React App
+# Rapport tp React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Pour lancer le projet
+Pré-réquis : Avoir installer Node.js
 
-## Available Scripts
+Dans le dossier contenant le projet, faire "npm start".
 
-In the project directory, you can run:
+## Explication du projet React
 
-### `npm start`
+Le principe du projet est d'avoir un composant qui permet de gérer une liste d'élément. J'ai un donc créer un composant Class qui s'occupe de la liste et de sa gestion "beerList.tsx" et un composant Fonctionnel "beer.tsx" qui représente une bière.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Le composant Beer
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Une bière possède 2 attributs, son id et son nom. On les défini en tant que Props du composant avec 
+```typescript=
+interface Props {
+  id: number;
+  name: string
+}
+```
 
-### `npm test`
+Il faut aussi lui donner de quoi se représenter en HTML quand un autre composant l'appelera, pour cela on ajoute : 
+```typescript=
+const Beer: React.FunctionComponent<Props> = (props) => {
+  return <span>ID : {props.id} | Name : {props.name}</span>;
+};
+```
+Quand un autre composant voudra appelé ce composant beer à l'aide d'une balise <Beer/>, il devra juste lui donner en plus un id et un nom comme ceci : 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```htmlmixed=
+ <Beer id={idDeLaBière} name={nomDeLaBiere} />
+```
 
-### `npm run build`
+## Le composant BeerList
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+BeerList étant une liste (incroyable), il lui faut donc un attribut liste qu'on définit dans son State : 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```typescript=
+interface State {
+    beerlist: string[];
+    value: string;
+};
+```
+L'attribut "value" servira comme valeur pour une balise <input> permettant l'ajout d'un élément à la "beerList".
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+J'ai donc créé 2 fonctions permettant d'ajouter et de supprimer un élément de la liste. this.SetState permet de modifier l'objet state(Interface State), il faut préciser quels attributs on veut modifier et la modification à effectuer.
 
-### `npm run eject`
+```typescript=
+supp = (find: string) => {
+        this.setState({
+            beerlist: this.state.beerlist.filter((item) => item !== find)
+        });
+    };
+ajout() {
+        this.setState(prevState => ({
+            beerlist: [...prevState.beerlist, this.state.value]
+        }));
+    };
+```
+Pour afficher ce composant on passe par une fonction render() qui va retourner un structure HTML du composant.
+```typescript=
+render() {
+        return (
+            [...]
+        );
+    }
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Le bouton d'input relie directement la valeur "value" du state à sa propre valeur, et quand sa valeur change, celle du state aussi.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+```htmlembedded=
+<input
+    type="text"
+    placeholder="Shazam"
+    value={this.state.value}
+    onChange={(event) => 
+    { this.setState({ value: event.target.value }) }}
+/>
+```
