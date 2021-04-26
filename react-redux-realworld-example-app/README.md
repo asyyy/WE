@@ -1,74 +1,75 @@
-# ![React + Redux Example App](project-logo.png)
+# Rapport Projet WE
 
-[![RealWorld Frontend](https://img.shields.io/badge/realworld-frontend-%23783578.svg)](http://realworld.io)
+## Introduction
 
-> ### React + Redux codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld-example-apps) spec and API.
+Dans le cadre de l'UE Web Engineering de ma première année de master Ingénierie Logiciel à l'Université de Rennes, j'ai dû réalisé un projet dont l'idée principale est de partir d'une application Web existante et d'ajouter une fonctionnalité au front.
+Nous avions la possibilité de partir d'un projet de notre encadrant [Oliver Barais](https://github.com/barais/doodlestudent/tree/main/front), d'un projet personnel ou bien du projet open source [RealWorld](https://medium.com/@ericsimons/introducing-realworld-6016654d36b5). J'ai choisi de partir du projet [RealWorld en React](https://github.com/khaledosman/react-redux-realworld-example-app) car il me permettait de faire du React en JS, technologie que j'utilise aussi dans le cadre d'une autre UE  de mon master.
 
-<a href="https://stackblitz.com/edit/react-redux-realworld" target="_blank"><img width="187" src="https://github.com/gothinkster/realworld/blob/master/media/edit_on_blitz.png?raw=true" /></a>&nbsp;&nbsp;<a href="https://thinkster.io/tutorials/build-a-real-world-react-redux-application" target="_blank"><img width="384" src="https://raw.githubusercontent.com/gothinkster/realworld/master/media/learn-btn-hr.png" /></a>
+## Installer et lancer
 
-### [Demo](https://react-redux.realworld.io)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+Pré-requis: avoir [Node.js](https://nodejs.org/en/)
 
-Originally created for this [GH issue](https://github.com/reactjs/redux/issues/1353). The codebase is now feature complete; please submit bug fixes via pull requests & feedback via issues.
+* Clone ce repo.
+* ```npm install``` pour installer toutes les dépendances.
+* ```npm start``` pour lancer le serveur local.
 
-We also have notes in [**our wiki**](https://github.com/gothinkster/react-redux-realworld-example-app/wiki) about how the various patterns used in this codebase and how they work (thanks [@thejmazz](https://github.com/thejmazz)!)
+## Mon composant : le New York Times
+
+### Le principe 
+L'idée de mon composant est d'ajouter un petit menu qui présentes différents types d'articles du New York Times : les plus récents, les plus consultés, ou ceux qui reçoivent le plus de mail.
+
+### Le visuel
+
+Composant Seul          |  Intégration dans la page
+:-------------------------:|:-------------------------:
+![](https://i.imgur.com/jgJDjOA.png)|![](https://i.imgur.com/JzP71WX.png)
 
 
-## Getting started
 
-You can view a live demo over at https://react-redux.realworld.io/
+### Le code
+*Chemin vers les classes "./src/components/Home/"*
 
-To get the frontend running locally:
+J'ai créé 2 classes : la première (`MenuNYTimes.js`) représente le menu en général et la deuxième (`ListOfArticles.js`) permet la gestion et l'affichage de liste des articles.
+J'ai réalisé mon interface à l'aide de [Semantic Ui React](https://react.semantic-ui.com/), la plupart de mes balises proviennent de cette bibliothèque.
 
-- Clone this repo
-- `npm install` to install all req'd dependencies
-- `npm start` to start the local server (this project uses create-react-app)
+![](https://i.imgur.com/k5cLDrE.jpg)
 
-Local web server will use port 4100 instead of standard React's port 3000 to prevent conflicts with some backends like Node or Rails. You can configure port in scripts section of `package.json`: we use [cross-env](https://github.com/kentcdodds/cross-env) to set environment variable PORT for React scripts, this is Windows-compatible way of setting environment variables.
+### MenuNYTimes.js
+
+Ce composant possède 2 attributs dans son state : 
+* `listArticles`, une liste qui permet de stocker tous les articles que l'on va récupérer grâce à l'[API du New York Times](https://developer.nytimes.com/).
+* `activeItem` permet une animation des 3 boutons "Recent/Popular/Polemic". Contiendra le nom de l'un de ces boutons, celui sélectionné aura un fond foncé et une petite flèche qui pointera vers le bas.
  
-Alternatively, you can add `.env` file in the root folder of project to set environment variables (use PORT to change webserver's port). This file will be ignored by git, so it is suitable for API keys and other sensitive stuff. Refer to [dotenv](https://github.com/motdotla/dotenv) and [React](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-development-environment-variables-in-env) documentation for more details. Also, please remove setting variable via script section of `package.json` - `dotenv` never override variables if they are already set.  
+Et 4 fonctions : 
 
-### Making requests to the backend API
+* `makeApiLink(category)` sert à créer la bonne requête à effectuer vers l'API. Le paramètre *category* représente le type d'articles souhaité (Recent/Popular/Polemic), il modifiera dans le state l'état de `activeItem` et retourne le string de l'url correspondant. La clé de l'API est stocké dans un fichier .env pour ne pas l'afficher en brut dans le code et je n'ai pas réussi à la sécuriser d'avantage.
 
-For convenience, we have a live API server running at https://conduit.productionready.io/api for the application to make requests against. You can view [the API spec here](https://github.com/GoThinkster/productionready/blob/master/api) which contains all routes & responses for the server.
+* `loadArticles(categoy)` sert à effectuer la requête de l'API, il génère la bonne url grâce à `makeApiLink(category)`. La réponse de la requête est un objet que l'on passe en JSON. En le parsant et on récupère uniquement la liste des articles que l'on stocke dans l'attribut *listArticles* du State. 
 
-The source code for the backend server (available for Node, Rails and Django) can be found in the [main RealWorld repo](https://github.com/gothinkster/realworld).
+* `componentDidMount()` permet d'effectuer une action au lancement du composant. Dans mon cas, je charge directement le composant en effectuant une requête qui va chercher les articles récents.
 
-If you want to change the API URL to a local server, simply edit `src/agent.js` and change `API_ROOT` to the local server's URL (i.e. `http://localhost:3000/api`)
+* `render()` permet de s'occuper de comment le composant s'affiche à l'écran à l'aide de balise. Ici, j'ai utilisé la balise `<Menu fluid vertical>` de la bibliothèque Semantic Ui React *(fluid -> adapte sa taille à la page, vertical -> un menu du haut vers le bas)*. Ce menu est composé de 3 parties : son titre (avec le logo et "NYTimes"), les boutons pour sélectionner le type d'article, et la liste des articles. La partie bouton est un autre menu où chaque élément est cliquable et exécutera `loadArticles(category)`, mettant à jour les articles affichés plus bas dans le menu.
 
+### ListOfArticles.js
 
-## Functionality overview
+La balise `<ListOfArticles>` est appelé dans `MenuNYTimes.js` pour gérer et intéragir la liste des articles. Il l'appelle avec 2 props `<ListOfArticles listOfArticles={listArticles} activeItem={activeItem}/>` : la liste des articles, et le type d'article défini dans ``MenuNYTimes.js``. 
 
-The example application is a social blogging site (i.e. a Medium.com clone) called "Conduit". It uses a custom API for all requests, including authentication. You can view a live demo over at https://redux.productionready.io/
+* `rightPathToImage(element)` permet d'aller rechercher l'image d'un article. Le chemin vers l'image n'est pas le même selon le type de l'article, d'où la nécessité de créer cette fonction. Selon le type de l'article, la fonction renvoie une balise `<Image .../>` avec le bon chemin, sinon une image pré-défini. Le paramètre `element` correspond à l'article désiré.
 
-**General functionality:**
+* `render()` : le composant est placé dans un `<Container />` ce qui permet d'éviter d'avoir des overflows sur les côtés (le texte qui déborde sur le reste de la page). Mais aussi pour avoir une boite de taille défini et ainsi une scrollbar pour dérouler tous les articles et ne pas avoir une page web qui scroll vers l'infini. À l'intérieur, j'utilise une `<List/>` où chaque `<List.Item ...>` est un article. Grâce aux possibilités qu'offre Semantic UI, on peut facilement mettre que la case de chaque article est cliquable et renvoie vers l'article original ainsi que la structure de la case : titre en haut, description en bas.
 
-- Authenticate users via JWT (login/signup pages + logout button on settings page)
-- CRU* users (sign up & settings page - no deleting required)
-- CRUD Articles
-- CR*D Comments on articles (no updating required)
-- GET and display paginated lists of articles
-- Favorite articles
-- Follow other users
+## Difficultés rencontrés
 
-**The general page breakdown looks like this:**
+* Ma première difficulté a été de bien comprendre la structure du code de base et surtout de savoir où et comment placer mon composant. J'ai du tester en plaçant du code random et en bougeant des éléments du code original pour mieux le comprendre. 
+* J'ai commencé à coder l'aspect graphique (``render()``) de mes composants sans me renseigner d'avantage sur des bibliothèques pouvant m'aider. N'ayant pas beaucoup d'expérience avec les balises HTML, j'ai donc d'abord passé beaucoup de temps à comprendre comment les utiliser et commencer à faire mes composants. En effectuant des recherches sur des façons de détailler mes composants (les boutons qui changent le type de la liste affiché, par exemple), j'ai découvert  Semantic Ui React et décidé de tout refaire à l'aide de cette bibliothèque.
 
-- Home page (URL: /#/ )
-    - List of tags
-    - List of articles pulled from either Feed, Global, or by Tag
-    - Pagination for list of articles
-- Sign in/Sign up pages (URL: /#/login, /#/register )
-    - Use JWT (store the token in localStorage)
-- Settings page (URL: /#/settings )
-- Editor page to create/edit articles (URL: /#/editor, /#/editor/article-slug-here )
-- Article page (URL: /#/article/article-slug-here )
-    - Delete article button (only shown to article's author)
-    - Render markdown from server client side
-    - Comments section at bottom of page
-    - Delete comment button (only shown to comment's author)
-- Profile page (URL: /#/@username, /#/@username/favorites )
-    - Show basic user info
-    - List of articles populated from author's created articles or author's favorited articles
+* J'ai beaucoup de mal à gérer le centrage de mes balises et le fait qu'il ne dépasse pas sur les autres composants. Difficulté facilement visible sur le titre du menu où je n'ai pas réussi à bien centrer quel que soit la taille de la page, le titre "NYTimes" et le logo ainsi que les boutons qui eux ne s'adaptent pas à la taille de la page et déborder quand on décide de réduire la page horizontalement.
 
-<br />
+* La documentation fournit pas le New York Times sur ses API n'est absolument pas à jour. La description des objets rendus par une requête ne correspond pas toujours à ce que l'on reçoit. Par exemple, pour aller chercher les images d'un article, je me suis rendu compte que les balises ne sont pas toujours celle défini dans la doc.
 
-[![Brought to you by Thinkster](https://raw.githubusercontent.com/gothinkster/realworld/master/media/end.png)](https://thinkster.io)
+Chemin selon la [doc](https://developer.nytimes.com/docs/most-popular-product/1/routes/viewed/%7Bperiod%7D.json/get)(en partant de ViewedArticle) : `element.media.['media-metadata'][0].url`.
+Chemin réel : ``element.multimedia[0].url``.
+
+## Point final
+
+Ce projet m'a permit de me rendre compte de la difficulté de devoir rentrer dans un code déjà existant alors que je n'ai pas exploité tout ce qu'il proposait (Store). L'importance de fragmenté son code en plusieurs composants, sans cela j'aurais probablement mis beaucoup plus de temps à comprendre le code original. Mais aussi l'importance de bien définir son projet à l'avance pour se renseigner sur des bibliothèques déjà existante pouvant faire gagner beaucoup de temps et permettant possiblement d'avoir un meilleur résultat que ce que l'on voulait.
