@@ -72,4 +72,5 @@ Chemin réel : ``element.multimedia[0].url``.
 
 ## Point final
 
-Ce projet m'a permit de me rendre compte de la difficulté de devoir rentrer dans un code déjà existant alors que je n'ai pas exploité tout ce qu'il proposait (Store). L'importance de fragmenté son code en plusieurs composants, sans cela j'aurais probablement mis beaucoup plus de temps à comprendre le code original. Mais aussi l'importance de bien définir son projet à l'avance pour se renseigner sur des bibliothèques déjà existante pouvant faire gagner beaucoup de temps et permettant possiblement d'avoir un meilleur résultat que ce que l'on voulait.
+Ce projet m'a permis de me rendre compte de la difficulté de devoir rentrer dans un code déjà existant alors que je n'ai pas exploité tout ce qu'il proposait (Store). L'importance de fragmenté son code en plusieurs composants, sans cela, j'aurais probablement mis beaucoup plus de temps à comprendre le code original. Mais aussi l'importance de bien définir son projet à l'avance pour se renseigner sur des bibliothèques déjà existantes pouvant faire gagner beaucoup de temps et permettant possiblement d'avoir un meilleur résultat que ce que l'on voulait.
+
